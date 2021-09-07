@@ -9,3 +9,4 @@ export_presets.cfg
 
 # MacOS specific ignores
 .DS_Store
+.DS_Store
