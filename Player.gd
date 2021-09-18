@@ -58,7 +58,7 @@ func _process(delta: float):
 
 
 # Configure the Player to start playing
-func start(pos: Vector2):
+func start(pos: Vector2) -> void:
 	position = pos; # set the player position
 	show(); # make the player visible
 	#$CollisionShape2D.disabled = false; # enable collisions

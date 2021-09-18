@@ -1,5 +1,14 @@
 extends Node
 
+# Potential enhancements
+# Main is using the interfaces of its children.  By doing that it increases the scope
+#  of change required when refactoring the children.  A less coupled approach may 
+#  make refactoring easier.
+#  e.g. score_changed signal and update_score(score: int) method
+#  e.g. game_over singal and signal emision in the game_over() method 
+# There are also structural dependencies that could be reduced using some of the
+#  best practices that are documented in the Godot documentation
+
 # External Dependencies
 # - 
 
@@ -22,9 +31,10 @@ func _ready():
 #	pass
 
 
-func game_over():
+func game_over() -> void:
 	$ScoreTimer.stop(); # stop the score timer so the player doesn't get any more score
 	$MobTimer.stop(); # stop the mob timer so enemies stop spawning
+	$HUD.show_game_over(); # display the game over HUD and allow user to start a new game
 
 
 # Receive hit signal from Player 
@@ -34,8 +44,13 @@ func _on_Player_hit():
 
 
 # initialise and start a new game
-func new_game():
-	score = 0; # initialise thte score to 0
+# called when a start game signal is received from HUD
+func new_game() -> void:
+	score = 0; # initialise the score to 0
+	
+	$HUD.update_score(score); # why isn't HUD listening for a score change event instead?
+	$HUD.show_message("Get Ready"); # this is confusing because it has the side effect of starting the game 
+	
 	$Player.start($StartPosition.position); # configure the player to start playing
 	$StartTimer.start(); # trigger the start of the game in a moment 
 
@@ -61,6 +76,7 @@ func _on_MobTimer_timeout():
 # Receive timeout signal from ScoreTimer
 func _on_ScoreTimer_timeout():
 	score += 1; # increment the player score
+	$HUD.update_score(score); # update the score in the HUD
 
 
 # Receive timeout signal from StartTimer
@@ -68,3 +84,8 @@ func _on_StartTimer_timeout():
 	$ScoreTimer.start(); # start the score timer - incrementing player score
 	$MobTimer.start(); # start the mob timer - spawning enemies
 
+
+# receive start game signal from HUD
+# initialise and start a new game
+func _on_HUD_start_game():
+	new_game();

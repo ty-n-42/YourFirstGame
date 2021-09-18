@@ -29,7 +29,13 @@ func _ready():
 func show_message(text: String):
 	$Message.text = text;
 	$Message.show();
-	$MessageTimer.start(); # this would be better in show_game_over()
+	$MessageTimer.start(); # would be more understandable with an inline yield
+
+
+# receive timeout signal from MessageTimer
+# hide the message
+func _on_MessageTimer_timeout():
+	$Message.hide();
 
 
 # display a game end message for a few moments then the game title
@@ -52,12 +58,6 @@ func show_game_over():
 # update the score label with the value of score
 func update_score(score):
 	$ScoreLabel.text = str(score);
-
-
-# receive timeout signal from MessageTimer
-# hide the message
-func _on_MessageTimer_timeout():
-	$Message.hide();
 
 
 # receive the pressed signal from StartButton
