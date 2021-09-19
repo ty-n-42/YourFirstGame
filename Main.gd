@@ -35,6 +35,7 @@ func game_over() -> void:
 	$ScoreTimer.stop(); # stop the score timer so the player doesn't get any more score
 	$MobTimer.stop(); # stop the mob timer so enemies stop spawning
 	$HUD.show_game_over(); # display the game over HUD and allow user to start a new game
+	get_tree().call_group("mobs", "queue_free"); # free all the mob instances
 
 
 # Receive hit signal from Player 
