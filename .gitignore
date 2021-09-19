@@ -2,7 +2,8 @@
 # Godot-specific ignores
 .import/
 export.cfg
-export_presets.cfg
+# allow export_presets.cfg so the project can be built by github
+#export_presets.cfg
 
 # Mono-specific ignores
 .mono/
